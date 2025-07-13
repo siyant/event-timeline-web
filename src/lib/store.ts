@@ -44,7 +44,7 @@ export const useEventTimelineStore = create<EventTimelineState>()((set) => ({
       timelineEvents: state.timelineEvents.filter((event) => event.id !== eventId),
     })),
 
-  updateTimelineEventNotes: (eventId, notes) =>
+  updateTimelineEventNotes: (eventId: string, notes: string) =>
     set((state) => ({
       timelineEvents: state.timelineEvents.map((event) => (event.id === eventId ? { ...event, notes } : event)),
     })),

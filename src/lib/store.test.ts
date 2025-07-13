@@ -107,4 +107,87 @@ describe("Event Timeline Store", () => {
       expect(updatedStore.timelineEvents[0].id).toBe(event2.id);
     });
   });
+
+  describe("updateTimelineEventNotes", () => {
+    it("should update notes for an existing timeline event", () => {
+      // Add an event to timeline
+      const event = store.events[0];
+      store.addToTimeline(event);
+      
+      // Update notes
+      const newNotes = "This deployment caused issues";
+      store.updateTimelineEventNotes(event.id, newNotes);
+      
+      const updatedStore = useEventTimelineStore.getState();
+      expect(updatedStore.timelineEvents).toHaveLength(1);
+      expect(updatedStore.timelineEvents[0].notes).toBe(newNotes);
+    });
+
+    it("should not affect other timeline events when updating notes", () => {
+      // Add two events to timeline
+      const event1 = store.events[0];
+      const event2 = store.events[1];
+      store.addToTimeline(event1);
+      store.addToTimeline(event2);
+      
+      // Update notes for first event only
+      const newNotes = "Updated notes for event 1";
+      store.updateTimelineEventNotes(event1.id, newNotes);
+      
+      const updatedStore = useEventTimelineStore.getState();
+      expect(updatedStore.timelineEvents).toHaveLength(2);
+      expect(updatedStore.timelineEvents[0].notes).toBe(newNotes);
+      expect(updatedStore.timelineEvents[1].notes).toBe("");
+    });
+
+    it("should handle updating notes for non-existent event", () => {
+      // Add an event to timeline
+      const event = store.events[0];
+      store.addToTimeline(event);
+      
+      // Try to update notes for non-existent event
+      store.updateTimelineEventNotes("non-existent-id", "Some notes");
+      
+      // Should not affect existing events
+      const updatedStore = useEventTimelineStore.getState();
+      expect(updatedStore.timelineEvents).toHaveLength(1);
+      expect(updatedStore.timelineEvents[0].notes).toBe("");
+    });
+  });
+
+  describe("clearTimeline", () => {
+    it("should clear all timeline events", () => {
+      // Add events to timeline
+      const event1 = store.events[0];
+      const event2 = store.events[1];
+      store.addToTimeline(event1);
+      store.addToTimeline(event2);
+      
+      // Verify events were added
+      expect(useEventTimelineStore.getState().timelineEvents).toHaveLength(2);
+      
+      // Clear timeline
+      store.clearTimeline();
+      
+      // Verify timeline is empty
+      expect(useEventTimelineStore.getState().timelineEvents).toEqual([]);
+    });
+
+    it("should not affect events array when clearing timeline", () => {
+      // Add events to timeline
+      const event1 = store.events[0];
+      store.addToTimeline(event1);
+      
+      // Store original events array length
+      const originalEventsLength = store.events.length;
+      
+      // Clear timeline
+      store.clearTimeline();
+      
+      // Verify events array is unchanged
+      const updatedStore = useEventTimelineStore.getState();
+      expect(updatedStore.events).toHaveLength(originalEventsLength);
+      expect(updatedStore.events[0].id).toBe(event1.id);
+    });
+  });
 });
