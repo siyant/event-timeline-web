@@ -6,6 +6,13 @@ import { useEventTimelineStore } from "./store";
 vi.mock("@/data/events.json", () => ({
   default: [
     {
+      type: "LogAnomoly",
+      short: "Error rate increase",
+      description: "Error rate increased to 5%",
+      time: "2024-01-01T09:30:00Z",
+      metric: "error.rate",
+    },
+    {
       type: "Deployment",
       short: "Deploy v1.0",
       description: "Deploy version 1.0 to production",
@@ -40,9 +47,10 @@ describe("Event Timeline Store", () => {
 
   describe("Initial State", () => {
     it("should initialize with events from JSON data", () => {
-      expect(store.events).toHaveLength(2);
-      expect(store.events[0].short).toBe("Deploy v1.0");
-      expect(store.events[1].short).toBe("CPU spike");
+      expect(store.events).toHaveLength(3);
+      expect(store.events[0].short).toBe("Error rate increase");
+      expect(store.events[1].short).toBe("Deploy v1.0");
+      expect(store.events[2].short).toBe("CPU spike");
     });
 
     it("should initialize with empty timeline", () => {
@@ -69,21 +77,27 @@ describe("Event Timeline Store", () => {
     });
 
     it("should maintain chronological order when adding events", () => {
-      // Add the later event first (event2 has time 11:00, event1 has time 10:00)
-      const event1 = store.events[0]; // 10:00
-      const event2 = store.events[1]; // 11:00
+      // Mock events are now chronologically ordered: event1 (09:30), event2 (10:00), event3 (11:00)
+      const event1 = store.events[0]; // 09:30 Error rate
+      const event2 = store.events[1]; // 10:00 Deploy
+      const event3 = store.events[2]; // 11:00 CPU spike
 
-      // Add later event first
-      store.addToTimeline(event2);
-      store.addToTimeline(event1);
+      // Add events out of chronological order to test sorting
+      store.addToTimeline(event3); // 11:00 (latest)
+      store.addToTimeline(event1); // 09:30 (earliest)
+      store.addToTimeline(event2); // 10:00 (middle)
 
       const updatedStore = useEventTimelineStore.getState();
-      expect(updatedStore.timelineEvents).toHaveLength(2);
+      expect(updatedStore.timelineEvents).toHaveLength(3);
 
-      // Should be in chronological order: event1 (10:00) then event2 (11:00)
+      // Should be in chronological order: event1 (09:30), event2 (10:00), event3 (11:00)
       expect(updatedStore.timelineEvents[0].id).toBe(event1.id);
       expect(updatedStore.timelineEvents[1].id).toBe(event2.id);
+      expect(updatedStore.timelineEvents[2].id).toBe(event3.id);
+
+      // Verify timestamps are in ascending order
       expect(updatedStore.timelineEvents[0].time.getTime()).toBeLessThan(updatedStore.timelineEvents[1].time.getTime());
+      expect(updatedStore.timelineEvents[1].time.getTime()).toBeLessThan(updatedStore.timelineEvents[2].time.getTime());
     });
   });
 
@@ -113,41 +127,50 @@ describe("Event Timeline Store", () => {
       // Add an event to timeline
       const event = store.events[0];
       store.addToTimeline(event);
-      
+
       // Update notes
       const newNotes = "This deployment caused issues";
       store.updateTimelineEventNotes(event.id, newNotes);
-      
+
       const updatedStore = useEventTimelineStore.getState();
       expect(updatedStore.timelineEvents).toHaveLength(1);
       expect(updatedStore.timelineEvents[0].notes).toBe(newNotes);
     });
 
     it("should not affect other timeline events when updating notes", () => {
-      // Add two events to timeline
-      const event1 = store.events[0];
-      const event2 = store.events[1];
+      // Add three events to timeline
+      const event1 = store.events[0]; // 09:30 Error rate
+      const event2 = store.events[1]; // 10:00 Deploy
+      const event3 = store.events[2]; // 11:00 CPU spike
       store.addToTimeline(event1);
       store.addToTimeline(event2);
-      
-      // Update notes for first event only
-      const newNotes = "Updated notes for event 1";
-      store.updateTimelineEventNotes(event1.id, newNotes);
-      
+      store.addToTimeline(event3);
+
+      // Update notes for middle event (chronologically - the deployment)
+      const newNotes = "Updated notes for deployment";
+      store.updateTimelineEventNotes(event2.id, newNotes);
+
       const updatedStore = useEventTimelineStore.getState();
-      expect(updatedStore.timelineEvents).toHaveLength(2);
-      expect(updatedStore.timelineEvents[0].notes).toBe(newNotes);
-      expect(updatedStore.timelineEvents[1].notes).toBe("");
+      expect(updatedStore.timelineEvents).toHaveLength(3);
+
+      // Find events in the chronologically sorted timeline
+      const errorEvent = updatedStore.timelineEvents.find((e) => e.id === event1.id);
+      const deploymentEvent = updatedStore.timelineEvents.find((e) => e.id === event2.id);
+      const cpuEvent = updatedStore.timelineEvents.find((e) => e.id === event3.id);
+
+      expect(errorEvent?.notes).toBe("");
+      expect(deploymentEvent?.notes).toBe(newNotes);
+      expect(cpuEvent?.notes).toBe("");
     });
 
     it("should handle updating notes for non-existent event", () => {
       // Add an event to timeline
       const event = store.events[0];
       store.addToTimeline(event);
-      
+
       // Try to update notes for non-existent event
       store.updateTimelineEventNotes("non-existent-id", "Some notes");
-      
+
       // Should not affect existing events
       const updatedStore = useEventTimelineStore.getState();
       expect(updatedStore.timelineEvents).toHaveLength(1);
@@ -162,13 +185,13 @@ describe("Event Timeline Store", () => {
       const event2 = store.events[1];
       store.addToTimeline(event1);
       store.addToTimeline(event2);
-      
+
       // Verify events were added
       expect(useEventTimelineStore.getState().timelineEvents).toHaveLength(2);
-      
+
       // Clear timeline
       store.clearTimeline();
-      
+
       // Verify timeline is empty
       expect(useEventTimelineStore.getState().timelineEvents).toEqual([]);
     });
@@ -177,13 +200,13 @@ describe("Event Timeline Store", () => {
       // Add events to timeline
       const event1 = store.events[0];
       store.addToTimeline(event1);
-      
+
       // Store original events array length
       const originalEventsLength = store.events.length;
-      
+
       // Clear timeline
       store.clearTimeline();
-      
+
       // Verify events array is unchanged
       const updatedStore = useEventTimelineStore.getState();
       expect(updatedStore.events).toHaveLength(originalEventsLength);
