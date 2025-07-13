@@ -11,17 +11,16 @@ Establish the fundamental event timeline functionality with basic UI components 
 
 ### Implementation Steps
 
-1. **Project Setup**
+1. **Project Setup** ✅
    - Initialize React + TypeScript project structure
    - Configure build tools and development environment
    - Set up basic routing and component architecture
    - Implement data loading from events.json
 
-2. **Event List Display**
+2. **Event List Display** ✅
    - Create scrollable event list component
    - Display all event properties (type, time, description, user/metric)
    - Implement basic event card design
-   - Add visual differentiation for event types
 
 3. **Timeline Selection**
    - Add "Add to Timeline" button for each event
@@ -83,6 +82,7 @@ Transform the basic functionality into a polished, production-ready interface wi
    - Add loading and empty states
    - Ensure responsive layout (1024-1440px)
    - Add hover effects and micro-interactions
+   - Add visual differentiation for event types
 
 6. **Error Handling and Feedback**
    - Implement toast notifications for user actions

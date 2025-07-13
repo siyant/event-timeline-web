@@ -1,0 +1,380 @@
+[
+  {
+    "type": "Deployment",
+    "short": "Checkout service blue green deploy",
+    "user": "alice",
+    "description": "Blue-green deployment of checkout-service v1.4.3 to production.",
+    "time": "2025-06-18T00:00:51.000Z"
+  },
+  {
+    "type": "Deployment",
+    "short": "Payments rollout version three two",
+    "user": "bob",
+    "description": "Payments-service v3.2 rolled out to 100% of traffic after successful canary.",
+    "time": "2025-06-18T00:24:45.000Z"
+  },
+  {
+    "type": "Deployment",
+    "short": "Frontend static assets cache bust",
+    "user": "carla",
+    "description": "Rebuilt frontend bundle with new hash to invalidate stale CDN assets.",
+    "time": "2025-06-18T00:48:00.000Z"
+  },
+  {
+    "type": "Deployment",
+    "short": "Inventory microservice weighted shift",
+    "user": "dave",
+    "description": "Shifted 30% of inventory-service traffic to the new Rust implementation.",
+    "time": "2025-06-18T01:12:00.000Z"
+  },
+  {
+    "type": "Deployment",
+    "short": "Search service canary to twenty",
+    "user": "erin",
+    "description": "Expanded search-service canary from 5% to 20% of live queries.",
+    "time": "2025-06-18T01:36:32.000Z"
+  },
+  {
+    "type": "Deployment",
+    "short": "Backend monolith patched security hotfix",
+    "user": "frank",
+    "description": "Applied critical security patch CVE-2025-1432 to backend-monolith.",
+    "time": "2025-06-18T02:00:21.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "CPU burn spikes on api",
+    "metric": "api_service_cpu_usage",
+    "description": "CPU usage on api-service surged from 45% to 95% for three minutes.",
+    "time": "2025-06-18T02:24:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Kafka consumer lag ballooned suddenly",
+    "metric": "kafka_consumer_lag_orders",
+    "description": "Orders topic lag exceeded 50 k messages, up from baseline 200.",
+    "time": "2025-06-18T02:48:24.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Redis hit rate collapsed briefly",
+    "metric": "redis_cache_hit_rate",
+    "description": "Cache hit rate fell to 40% causing elevated DB load.",
+    "time": "2025-06-18T03:12:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Database connections saturated write pool",
+    "metric": "db_write_pool_in_use",
+    "description": "Write pool reached 100% utilization, triggering queueing delays.",
+    "time": "2025-06-18T03:36:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Ingress error rate crossed threshold",
+    "metric": "nginx_5xx_rate",
+    "description": "5xx responses peaked at 8% vs SLO of 0.1%.",
+    "time": "2025-06-18T04:00:34.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Memory leak in notifications job",
+    "metric": "notifications_rss_memory",
+    "description": "Resident memory climbed steadily to container limit, OOM-killed.",
+    "time": "2025-06-18T04:24:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "P95 latency doubled on search",
+    "metric": "search_http_p95_latency_ms",
+    "description": "P95 latency increased from 220 ms to 480 ms for five consecutive minutes.",
+    "time": "2025-06-18T04:48:39.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Disk IO waits on database node",
+    "metric": "db_disk_io_wait",
+    "description": "Average disk IO wait time exceeded 25 ms indicating storage contention.",
+    "time": "2025-06-18T05:12:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Thread pool exhaustion mailer",
+    "metric": "mailer_thread_pool_busy",
+    "description": "Busy threads hit 100% causing queue backlog of outbound emails.",
+    "time": "2025-06-18T05:36:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Queue depth surged cohort recompute",
+    "metric": "cohort_queue_depth",
+    "description": "Cohort recomputation queue depth rose 10× during nightly batch.",
+    "time": "2025-06-18T06:24:34.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "GPU util pegged on inference",
+    "metric": "inference_gpu_utilization",
+    "description": "GPU usage stuck at 99% causing throttling of real-time predictions.",
+    "time": "2025-06-18T06:24:36.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Error budget burn rate critical",
+    "metric": "frontend_burn_rate",
+    "description": "Burn rate hit 14× allowed over last hour—alert fired.",
+    "time": "2025-06-18T06:48:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Load balancer active conn plateau",
+    "metric": "alb_active_connections",
+    "description": "Active connections flat-lined at max 50 k, new sessions queued.",
+    "time": "2025-06-18T07:12:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Cron scheduler miss frequency rising",
+    "metric": "scheduler_missed_runs",
+    "description": "Missed scheduled jobs climbed from 0 to 12 per hour.",
+    "time": "2025-06-18T07:36:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Pod restarts spike auth service",
+    "metric": "auth_pod_restart_count",
+    "description": "Auth pods restarting repeatedly due to readinessProbe failures.",
+    "time": "2025-06-18T08:00:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Hot shard imbalance Elasticsearch",
+    "metric": "es_hot_shard_percent",
+    "description": "Hot shards exceeded 25% threshold impacting search throughput.",
+    "time": "2025-06-18T08:24:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Network egress burst analytics",
+    "metric": "analytics_egress_mbps",
+    "description": "Outbound traffic jumped to 5 Gbps during report export.",
+    "time": "2025-06-18T08:48:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Object storage 5xx uptick backups",
+    "metric": "s3_backup_5xx_count",
+    "description": "S3 reported elevated 5xx errors causing backup retries.",
+    "time": "2025-06-18T09:12:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "TLS handshake failures rise edge",
+    "metric": "edge_tls_handshake_failure_rate",
+    "description": "Handshake failures increased tenfold indicating possible cert mis-match.",
+    "time": "2025-06-18T09:36:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Queue processing timeouts payments",
+    "metric": "payments_queue_timeout_rate",
+    "description": "Timeout rate on payments queue hit 6% due to downstream slowness.",
+    "time": "2025-06-18T10:00:43.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Cache eviction storm promo engine",
+    "metric": "promo_cache_evictions",
+    "description": "Evictions spiked 20× during campaign load, impacting response time.",
+    "time": "2025-06-18T10:24:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Lambda cold starts exceed baseline",
+    "metric": "lambda_cold_start_count",
+    "description": "Cold starts per minute rose from 2 to 35 during traffic surge.",
+    "time": "2025-06-18T10:48:00.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Replication lag rds follower node",
+    "metric": "rds_replication_lag_seconds",
+    "description": "Follower lag grew to 180 s impacting read-heavy queries.",
+    "time": "2025-06-18T11:12:39.000Z"
+  },
+  {
+    "type": "MetricAnomoly",
+    "short": "Thread count explosion image proxy",
+    "metric": "image_proxy_thread_count",
+    "description": "Thread count jumped to 4 k after config reload, near ulimit.",
+    "time": "2025-06-18T11:36:47.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Null pointer flood in auth",
+    "description": "Surge of NullPointerException stack traces in auth-service logs.",
+    "time": "2025-06-18T12:00:23.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Payment gateway refused token errors",
+    "description": "Repeated 'token_refused' errors from third-party payment gateway.",
+    "time": "2025-06-18T12:24:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Unexpected 301 loops at edge",
+    "description": "Logs show clients stuck in 301 redirect loops for legacy paths.",
+    "time": "2025-06-18T12:48:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Segfaults detected in image proxy",
+    "description": "Core dumps generated by image-proxy binary indicating memory corruption.",
+    "time": "2025-06-18T13:12:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Slow query warnings database shard",
+    "description": "Thousands of slow-query log entries exceeding 5 s threshold.",
+    "time": "2025-06-18T13:36:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "JWT signature invalid login flow",
+    "description": "Invalid JWT signature errors ballooned, likely mis-configured secret.",
+    "time": "2025-06-18T14:00:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Intermittent 400 malformed json api",
+    "description": "API layer logging malformed JSON payloads from unknown clients.",
+    "time": "2025-06-18T14:24:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Circuit breaker open order service",
+    "description": "Order-service logs indicate circuit breaker opened for payment calls.",
+    "time": "2025-06-18T14:48:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Timeout waiting redis connection",
+    "description": "Frequent 'TimeoutError: Could not get Redis connection from pool'.",
+    "time": "2025-06-18T15:12:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Unhandled promise rejection checkout",
+    "description": "Checkout-frontend emitted unhandled promise rejections—stack traces recorded.",
+    "time": "2025-06-18T15:36:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "SSL cert expired internal service",
+    "description": "Logs show expired certificate errors when calling analytics-internal.",
+    "time": "2025-06-18T16:00:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "ORM deadlock detected shard two",
+    "description": "Deadlock warnings in ORM layer for shard-2 during high contention.",
+    "time": "2025-06-18T16:24:34.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Opcode cache restart php worker",
+    "description": "PHP workers restarted opcode cache unexpectedly every minute.",
+    "time": "2025-06-18T16:48:12.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "DNS lookup failures outbound calls",
+    "description": "Service logs 'ENOTFOUND' errors resolving external partner domains.",
+    "time": "2025-06-18T17:12:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Rate limiter exceeded publishing api",
+    "description": "Publishing-API rejected requests with '429 Too Many Requests' bursts.",
+    "time": "2025-06-18T17:36:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Broken pipe errors websocket server",
+    "description": "Websocket server logged 'broken pipe' indicating client disconnect storms.",
+    "time": "2025-06-18T18:00:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Heap allocation failure graph builder",
+    "description": "Graph-builder logged 'std::bad_alloc' indicating heap exhaustion.",
+    "time": "2025-06-18T18:24:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Scheduler drift detected batch jobs",
+    "description": "Cron-scheduler reported drift >120 s for recurring ETL jobs.",
+    "time": "2025-06-18T18:48:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Signature mismatch S3 presigned url",
+    "description": "Backend logs signature mismatch errors on presigned S3 upload URLs.",
+    "time": "2025-06-18 19:12:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Application level panic user service",
+    "description": "User-service panicked: 'index out of range' in recommendation handler.",
+    "time": "2025-06-18T19:36:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Authentication token expired early",
+    "description": "Early expiration of auth tokens caused forced logouts for users.",
+    "time": "2025-06-18T20:00:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Cache stampede detected product page",
+    "description": "Simultaneous cache rebuilds logged for hot product-page fragment.",
+    "time": "2025-06-18T20:24:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Unhandled SIGTERM graceful shutdown failure",
+    "description": "Service did not drain connections before SIGTERM; logs captured abrupt close.",
+    "time": "2025-06-18T20:48:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Parser error processing csv uploads",
+    "description": "Log entries show CSV parser errors due to unexpected quoting.",
+    "time": "2025-06-18T21:12:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Stale config warning feature flags",
+    "description": "Feature-flag service warned of stale config older than 10 min.",
+    "time": "2025-06-18T21:36:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "gRPC status unauthenticated internal",
+    "description": "Internal gRPC calls returning UNAUTHENTICATED status—token not propagated.",
+    "time": "2025-06-18T22:00:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Replay attack suspected login endpoint",
+    "description": "Login endpoint reported duplicated nonces—possible replay attack detected.",
+    "time": "2025-06-18T22:24:00.000Z"
+  },
+  {
+    "type": "LogAnomoly",
+    "short": "Filesystem read-only remount mysql",
+    "description": "MySQL instance remounted root filesystem read-only after I/O errors.",
+    "time": "2025-06-18T22:48:00.000Z"
+  }
+]
