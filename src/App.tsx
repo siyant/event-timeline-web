@@ -1,7 +1,10 @@
+import { useState } from "react";
+
 import { TimelineEventCard } from "@/components/TimelineEventCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEventTimelineStore } from "@/lib/store";
+import { generateTimelineMarkdown } from "@/lib/string-formatting";
 
 function App() {
   const events = useEventTimelineStore((state) => state.events);
@@ -10,8 +13,21 @@ function App() {
   const removeFromTimeline = useEventTimelineStore((state) => state.removeFromTimeline);
   const clearTimeline = useEventTimelineStore((state) => state.clearTimeline);
 
+  const [isCopied, setIsCopied] = useState(false);
+
   const isEventInTimeline = (eventId: string) => {
     return timelineEvents.some((timelineEvent) => timelineEvent.id === eventId);
+  };
+
+  const copyMarkdownToClipboard = async () => {
+    const markdown = generateTimelineMarkdown(timelineEvents);
+    try {
+      await navigator.clipboard.writeText(markdown);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 5000);
+    } catch (err) {
+      console.error("Failed to copy to clipboard:", err);
+    }
   };
 
   return (
@@ -52,9 +68,14 @@ function App() {
             Timeline ({timelineEvents.length} event{timelineEvents.length !== 1 ? "s" : ""})
           </h1>
           {timelineEvents.length > 0 && (
-            <Button variant="outline" size="sm" onClick={clearTimeline}>
-              Clear Timeline
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={copyMarkdownToClipboard}>
+                {isCopied ? "Copied" : "Copy Markdown"}
+              </Button>
+              <Button variant="outline" size="sm" onClick={clearTimeline}>
+                Clear Timeline
+              </Button>
+            </div>
           )}
         </div>
         {timelineEvents.length === 0 ? (

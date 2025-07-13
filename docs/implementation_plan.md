@@ -34,7 +34,7 @@ Establish the fundamental event timeline functionality with basic UI components 
    - Create basic inline editing interface
    - Support note updates and deletions
 
-5. **Markdown Export**
+5. **Markdown Export** ✅
    - Generate Markdown from timeline data
    - Format timestamps and descriptions
    - Include user annotations in export
