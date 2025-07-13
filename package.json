@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start": "npm run build && npm run preview",
     "build": "tsc -b && vite build",
     "format": "biome format --write",
     "format:check": "biome format",
