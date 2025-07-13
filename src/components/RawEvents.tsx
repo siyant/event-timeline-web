@@ -3,7 +3,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useEventTimelineStore } from "@/lib/store";
+import type { EventType } from "@/lib/types";
 
 export function RawEvents() {
   const events = useEventTimelineStore((state) => state.events);
@@ -12,25 +14,34 @@ export function RawEvents() {
   const removeFromTimeline = useEventTimelineStore((state) => state.removeFromTimeline);
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [eventTypeFilter, setEventTypeFilter] = useState<EventType | "all">("all");
 
   const isEventInTimeline = (eventId: string) => {
     return timelineEvents.some((timelineEvent) => timelineEvent.id === eventId);
   };
 
   const filterEvents = () => {
-    if (!searchQuery.trim()) {
-      return events;
+    let filtered = events;
+
+    // Apply text search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter((event) => {
+        return (
+          event.short.toLowerCase().includes(query) ||
+          event.description.toLowerCase().includes(query) ||
+          (event.user && event.user.toLowerCase().includes(query)) ||
+          (event.metric && event.metric.toLowerCase().includes(query))
+        );
+      });
     }
 
-    const query = searchQuery.toLowerCase();
-    return events.filter((event) => {
-      return (
-        event.short.toLowerCase().includes(query) ||
-        event.description.toLowerCase().includes(query) ||
-        (event.user && event.user.toLowerCase().includes(query)) ||
-        (event.metric && event.metric.toLowerCase().includes(query))
-      );
-    });
+    // Apply event type filter
+    if (eventTypeFilter !== "all") {
+      filtered = filtered.filter((event) => event.type === eventTypeFilter);
+    }
+
+    return filtered;
   };
 
   const filteredEvents = filterEvents();
@@ -38,13 +49,24 @@ export function RawEvents() {
   return (
     <div className="h-full p-4">
       <h1 className="text-lg font-bold mb-4 flex-shrink-0">Raw events</h1>
-      <div className="mb-4 flex-shrink-0">
+      <div className="mb-4 flex-shrink-0 space-y-2">
         <Input
           placeholder="Search events..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full"
         />
+        <Select value={eventTypeFilter} onValueChange={(value) => setEventTypeFilter(value as EventType | "all")}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Filter by event type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All types</SelectItem>
+            <SelectItem value="Deployment">Deployment</SelectItem>
+            <SelectItem value="MetricAnomoly">MetricAnomoly</SelectItem>
+            <SelectItem value="LogAnomoly">LogAnomoly</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="space-y-2 overflow-y-auto flex-1">
         {filteredEvents.map((event) => (
@@ -73,9 +95,7 @@ export function RawEvents() {
           </Card>
         ))}
         {filteredEvents.length === 0 && searchQuery.trim() && (
-          <div className="text-center text-gray-500 py-8">
-            No events found matching "{searchQuery}"
-          </div>
+          <div className="text-center text-gray-500 py-8">No events found matching "{searchQuery}"</div>
         )}
       </div>
     </div>
