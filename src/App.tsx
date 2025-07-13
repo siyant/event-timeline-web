@@ -6,7 +6,6 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/componen
 import { useEventTimelineStore } from "@/lib/store";
 
 function App() {
-  const events = useEventTimelineStore((state) => state.events);
   const addToTimeline = useEventTimelineStore((state) => state.addToTimeline);
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -14,10 +13,7 @@ function App() {
 
     if (over && over.id === "timeline-droppable") {
       const eventId = active.id as string;
-      const eventToAdd = events.find((e) => e.id === eventId);
-      if (eventToAdd) {
-        addToTimeline(eventToAdd);
-      }
+      addToTimeline(eventId);
     }
   };
 

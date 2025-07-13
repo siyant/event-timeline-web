@@ -25,31 +25,31 @@ function EventCard({ event, isDraggable }: { event: Event; isDraggable: boolean 
     disabled: !isDraggable,
   });
 
-  const style = transform ? {
-    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-  } : undefined;
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined;
 
   return (
-    <Card 
-      ref={setNodeRef} 
-      style={style} 
-      className={`gap-2 py-4 ${isDraggable ? 'cursor-grab active:cursor-grabbing' : ''} ${isDragging ? 'opacity-50 z-50' : ''}`}
+    <Card
+      ref={setNodeRef}
+      style={style}
+      className={`gap-2 py-4 ${isDraggable ? "cursor-grab active:cursor-grabbing" : ""} ${isDragging ? "opacity-50 z-50" : ""}`}
       {...(isDraggable ? { ...listeners, ...attributes } : {})}
     >
       <CardHeader className="pb-0">
         <div className="flex items-center justify-between mb-1">
           <div className="flex items-center gap-2">
             <EventTypeTag type={event.type} />
-            <div className="text-xs text-gray-500">
-              {formatEventDateTime(event.time)}
-            </div>
+            <div className="text-xs text-gray-500">{formatEventDateTime(event.time)}</div>
           </div>
           {isEventInTimeline(event.id) ? (
             <Button variant="outline" size="sm" onClick={() => removeFromTimeline(event.id)}>
               Remove
             </Button>
           ) : (
-            <Button size="sm" onClick={() => addToTimeline(event)}>
+            <Button size="sm" onClick={() => addToTimeline(event.id)}>
               Add
             </Button>
           )}
@@ -101,9 +101,7 @@ export function RawEvents() {
   return (
     <div className="h-full p-4">
       <h1 className="text-lg font-bold mb-4 flex-shrink-0">Raw events</h1>
-      <p className="text-sm text-gray-600 mb-4 flex-shrink-0">
-        Drag events to the timeline or use the Add button
-      </p>
+      <p className="text-sm text-gray-600 mb-4 flex-shrink-0">Drag events to the timeline or use the Add button</p>
       <div className="mb-4 flex-shrink-0 space-y-2">
         <div className="relative">
           <Input
@@ -146,9 +144,7 @@ export function RawEvents() {
       <div className="space-y-2 overflow-y-auto flex-1">
         {filteredEvents.map((event) => {
           const inTimeline = timelineEvents.some((timelineEvent) => timelineEvent.id === event.id);
-          return (
-            <EventCard key={event.id} event={event} isDraggable={!inTimeline} />
-          );
+          return <EventCard key={event.id} event={event} isDraggable={!inTimeline} />;
         })}
         {filteredEvents.length === 0 && searchQuery.trim() && (
           <div className="text-center text-gray-500 py-8">No events found matching "{searchQuery}"</div>

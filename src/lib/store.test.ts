@@ -68,7 +68,7 @@ describe("Event Timeline Store", () => {
   describe("addToTimeline", () => {
     it("should add an event to the timeline", () => {
       const event = store.events[0];
-      store.addToTimeline(event);
+      store.addToTimeline(event.id);
 
       const updatedStore = useEventTimelineStore.getState();
       expect(updatedStore.timelineEvents).toHaveLength(1);
@@ -83,9 +83,9 @@ describe("Event Timeline Store", () => {
       const event3 = store.events[2]; // 11:00 CPU spike
 
       // Add events out of chronological order to test sorting
-      store.addToTimeline(event3); // 11:00 (latest)
-      store.addToTimeline(event1); // 09:30 (earliest)
-      store.addToTimeline(event2); // 10:00 (middle)
+      store.addToTimeline(event3.id); // 11:00 (latest)
+      store.addToTimeline(event1.id); // 09:30 (earliest)
+      store.addToTimeline(event2.id); // 10:00 (middle)
 
       const updatedStore = useEventTimelineStore.getState();
       expect(updatedStore.timelineEvents).toHaveLength(3);
@@ -99,6 +99,30 @@ describe("Event Timeline Store", () => {
       expect(updatedStore.timelineEvents[0].time.getTime()).toBeLessThan(updatedStore.timelineEvents[1].time.getTime());
       expect(updatedStore.timelineEvents[1].time.getTime()).toBeLessThan(updatedStore.timelineEvents[2].time.getTime());
     });
+
+    it("should not add duplicate events to timeline", () => {
+      const event = store.events[0];
+
+      // Add event to timeline
+      store.addToTimeline(event.id);
+      expect(useEventTimelineStore.getState().timelineEvents).toHaveLength(1);
+
+      // Try to add same event again
+      store.addToTimeline(event.id);
+
+      // Should still have only one event
+      const updatedStore = useEventTimelineStore.getState();
+      expect(updatedStore.timelineEvents).toHaveLength(1);
+      expect(updatedStore.timelineEvents[0].id).toBe(event.id);
+    });
+
+    it("should handle adding event with invalid ID", () => {
+      // Try to add event with non-existent ID
+      store.addToTimeline("non-existent-id");
+
+      // Timeline should remain empty
+      expect(useEventTimelineStore.getState().timelineEvents).toHaveLength(0);
+    });
   });
 
   describe("removeFromTimeline", () => {
@@ -106,8 +130,8 @@ describe("Event Timeline Store", () => {
       // Add two events to timeline
       const event1 = store.events[0];
       const event2 = store.events[1];
-      store.addToTimeline(event1);
-      store.addToTimeline(event2);
+      store.addToTimeline(event1.id);
+      store.addToTimeline(event2.id);
 
       // Verify both were added
       expect(useEventTimelineStore.getState().timelineEvents).toHaveLength(2);
@@ -126,7 +150,7 @@ describe("Event Timeline Store", () => {
     it("should update notes for an existing timeline event", () => {
       // Add an event to timeline
       const event = store.events[0];
-      store.addToTimeline(event);
+      store.addToTimeline(event.id);
 
       // Update notes
       const newNotes = "This deployment caused issues";
@@ -142,9 +166,9 @@ describe("Event Timeline Store", () => {
       const event1 = store.events[0]; // 09:30 Error rate
       const event2 = store.events[1]; // 10:00 Deploy
       const event3 = store.events[2]; // 11:00 CPU spike
-      store.addToTimeline(event1);
-      store.addToTimeline(event2);
-      store.addToTimeline(event3);
+      store.addToTimeline(event1.id);
+      store.addToTimeline(event2.id);
+      store.addToTimeline(event3.id);
 
       // Update notes for middle event (chronologically - the deployment)
       const newNotes = "Updated notes for deployment";
@@ -166,7 +190,7 @@ describe("Event Timeline Store", () => {
     it("should handle updating notes for non-existent event", () => {
       // Add an event to timeline
       const event = store.events[0];
-      store.addToTimeline(event);
+      store.addToTimeline(event.id);
 
       // Try to update notes for non-existent event
       store.updateTimelineEventNotes("non-existent-id", "Some notes");
@@ -183,8 +207,8 @@ describe("Event Timeline Store", () => {
       // Add events to timeline
       const event1 = store.events[0];
       const event2 = store.events[1];
-      store.addToTimeline(event1);
-      store.addToTimeline(event2);
+      store.addToTimeline(event1.id);
+      store.addToTimeline(event2.id);
 
       // Verify events were added
       expect(useEventTimelineStore.getState().timelineEvents).toHaveLength(2);
@@ -199,7 +223,7 @@ describe("Event Timeline Store", () => {
     it("should not affect events array when clearing timeline", () => {
       // Add events to timeline
       const event1 = store.events[0];
-      store.addToTimeline(event1);
+      store.addToTimeline(event1.id);
 
       // Store original events array length
       const originalEventsLength = store.events.length;

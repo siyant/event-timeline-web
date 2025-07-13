@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 import eventsData from "@/data/events.json";
 import type { Event, RawEvent, TimelineEvent } from "@/lib/types";
@@ -16,7 +16,7 @@ const convertRawEventsToEvents = (rawEvents: RawEvent[]): Event[] => {
 interface EventTimelineState {
   events: Event[];
   timelineEvents: TimelineEvent[];
-  addToTimeline: (event: Event) => void;
+  addToTimeline: (eventId: string) => void;
   removeFromTimeline: (eventId: string) => void;
   updateTimelineEventNotes: (eventId: string, notes: string) => void;
   clearTimeline: () => void;
@@ -28,8 +28,22 @@ export const useEventTimelineStore = create<EventTimelineState>()(
       events: convertRawEventsToEvents(eventsData as RawEvent[]),
       timelineEvents: [],
 
-      addToTimeline: (event: Event) =>
+      addToTimeline: (eventId: string) =>
         set((state) => {
+          console.log("addToTimeline eventId :>>", eventId);
+          // Check if event already exists in timeline
+          if (state.timelineEvents.some((e) => e.id === eventId)) {
+            console.log("already in timeline");
+            return state;
+          }
+
+          // Find the event in the events array
+          const event = state.events.find((e) => e.id === eventId);
+          console.log("event not found");
+          if (!event) {
+            return state;
+          }
+
           const timelineEvent: TimelineEvent = {
             ...event,
             notes: "",
