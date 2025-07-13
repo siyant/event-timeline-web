@@ -53,13 +53,13 @@ Transform the basic functionality into a polished, production-ready interface wi
 
 ### Implementation Steps
 
-1. **Drag-and-Drop Implementation**
+1. **Drag-and-Drop Implementation** 🚧
    - Replace "Add" buttons with drag-and-drop functionality
    - Add visual drag indicators and drop zones
    - Implement smooth drag animations
    - Support event reordering within timeline
 
-2. **Timeline Visualization Enhancement**
+2. **Timeline Visualization Enhancement** 🚧
    - Implement dynamic time gap visualization
    - Scale timeline to emphasize temporal relationships
    - Add visual markers for time intervals
