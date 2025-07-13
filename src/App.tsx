@@ -13,7 +13,9 @@ function App() {
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={67} minSize={50}>
-          <Timeline />
+          <div className="h-screen flex flex-col overflow-auto">
+            <Timeline />
+          </div>
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
