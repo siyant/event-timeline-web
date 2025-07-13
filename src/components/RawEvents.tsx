@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -50,23 +51,43 @@ export function RawEvents() {
     <div className="h-full p-4">
       <h1 className="text-lg font-bold mb-4 flex-shrink-0">Raw events</h1>
       <div className="mb-4 flex-shrink-0 space-y-2">
-        <Input
-          placeholder="Search events..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full"
-        />
-        <Select value={eventTypeFilter} onValueChange={(value) => setEventTypeFilter(value as EventType | "all")}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Filter by event type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All types</SelectItem>
-            <SelectItem value="Deployment">Deployment</SelectItem>
-            <SelectItem value="MetricAnomoly">MetricAnomoly</SelectItem>
-            <SelectItem value="LogAnomoly">LogAnomoly</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="relative">
+          <Input
+            placeholder="Search events..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pr-8"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+        <div className="relative">
+          <Select value={eventTypeFilter} onValueChange={(value) => setEventTypeFilter(value as EventType | "all")}>
+            <SelectTrigger className="w-full pr-8">
+              <SelectValue placeholder="Filter by event type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All event types</SelectItem>
+              <SelectItem value="Deployment">Deployment</SelectItem>
+              <SelectItem value="MetricAnomoly">MetricAnomoly</SelectItem>
+              <SelectItem value="LogAnomoly">LogAnomoly</SelectItem>
+            </SelectContent>
+          </Select>
+          {eventTypeFilter !== "all" && (
+            <button
+              onClick={() => setEventTypeFilter("all")}
+              className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer bg-background z-10"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
       </div>
       <div className="space-y-2 overflow-y-auto flex-1">
         {filteredEvents.map((event) => (
