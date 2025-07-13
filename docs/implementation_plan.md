@@ -74,8 +74,10 @@ Transform the basic functionality into a polished, production-ready interface wi
 4. **Annotation UX Improvements**
    - Create modal or popover for detailed event editing
    - Add rich text formatting options
-   - Implement keyboard shortcuts for quick edits
+   - Implement keyboard shortcuts for quick edits (Ctrl+Enter to save, Escape to cancel)
    - Add visual feedback for saved changes
+   - Auto-save functionality for notes after typing delay
+   - Note timestamps showing last modified time
 
 5. **UI Polish and Responsiveness**
    - Implement professional visual design
@@ -89,6 +91,11 @@ Transform the basic functionality into a polished, production-ready interface wi
    - Add error boundaries for graceful failures
    - Create helpful empty state messages
    - Validate user inputs
+
+7. **State Persistence**
+   - Save application state to local storage
+   - Restore timeline and notes on page reload
+   - Handle data migration for future updates
 
 ### Deliverables
 - Intuitive drag-and-drop interface
