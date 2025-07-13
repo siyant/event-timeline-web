@@ -1,6 +1,7 @@
-import { useEventTimelineStore } from "@/lib/store";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { TimelineEventCard } from "@/components/TimelineEventCard";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEventTimelineStore } from "@/lib/store";
 
 function App() {
   const events = useEventTimelineStore((state) => state.events);
@@ -61,23 +62,7 @@ function App() {
         ) : (
           <div className="space-y-3">
             {timelineEvents.map((event) => (
-              <Card key={event.id}>
-                <CardHeader>
-                  <CardTitle className="text-sm">{event.short}</CardTitle>
-                  <CardDescription>{event.type}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm">{event.description}</p>
-                  <div className="text-xs text-gray-500 mt-2">{event.time.toLocaleString()}</div>
-                  {event.user && <div className="text-sm text-gray-600 mt-1">User: {event.user}</div>}
-                  {event.metric && <div className="text-sm text-gray-600 mt-1">Metric: {event.metric}</div>}
-                </CardContent>
-                <CardFooter>
-                  <Button variant="outline" size="sm" onClick={() => removeFromTimeline(event.id)}>
-                    Remove from Timeline
-                  </Button>
-                </CardFooter>
-              </Card>
+              <TimelineEventCard key={event.id} event={event} />
             ))}
           </div>
         )}
