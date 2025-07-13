@@ -1,3 +1,4 @@
+import { useDroppable } from "@dnd-kit/core";
 import { useState } from "react";
 
 import { TimelineEventCard } from "@/components/TimelineEventCard";
@@ -10,6 +11,10 @@ export function Timeline() {
   const clearTimeline = useEventTimelineStore((state) => state.clearTimeline);
 
   const [isCopied, setIsCopied] = useState(false);
+  
+  const { isOver, setNodeRef } = useDroppable({
+    id: "timeline-droppable",
+  });
 
   const copyMarkdownToClipboard = async () => {
     const markdown = generateTimelineMarkdown(timelineEvents);
@@ -23,7 +28,7 @@ export function Timeline() {
   };
 
   return (
-    <div className="h-full p-4">
+    <div ref={setNodeRef} className={`h-full p-4 ${isOver ? 'bg-blue-50' : ''}`}>
       <div className="flex justify-between items-center mb-10">
         <h1 className="text-lg font-bold">
           Timeline ({timelineEvents.length} event{timelineEvents.length !== 1 ? "s" : ""})
@@ -41,7 +46,9 @@ export function Timeline() {
       </div>
       <div className="max-w-3xl mx-auto">
         {timelineEvents.length === 0 ? (
-          <p className="text-gray-500">No events in timeline yet. Add events from the left panel.</p>
+          <p className="text-gray-500">
+            No events in timeline yet. {isOver ? "Drop here to add!" : "Add events from the left panel or drag them here."}
+          </p>
         ) : (
           <div>
             {timelineEvents.map((event, index) => (
