@@ -1,7 +1,9 @@
 import { useState } from "react";
 
+import { EventTypeTag } from "@/components/EventTypeTag";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { formatEventDateTime } from "@/lib/string-formatting";
 import { useEventTimelineStore } from "@/lib/store";
 import type { TimelineEvent } from "@/lib/types";
 
@@ -33,16 +35,6 @@ export function TimelineEventCard({ event, isLast = false }: TimelineEventCardPr
     setTempNotes("");
   };
 
-  const formatTime = (date: Date) => {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const month = months[date.getMonth()];
-    const day = date.getDate();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-    return `${month} ${day}, ${hours}:${minutes}:${seconds}`;
-  };
 
   return (
     <div className="relative flex">
@@ -51,25 +43,30 @@ export function TimelineEventCard({ event, isLast = false }: TimelineEventCardPr
         {/* Timeline circle */}
         <div className="w-3 h-3 bg-gray-400 rounded-full border-2 border-white z-10" />
         {/* Timeline line */}
-        {!isLast && (
-          <div className="w-0.5 bg-gray-300 flex-1 mt-1" style={{ minHeight: '80px' }} />
-        )}
+        {!isLast && <div className="w-0.5 bg-gray-300 flex-1 mt-1" style={{ minHeight: "80px" }} />}
       </div>
 
       {/* Event content */}
-      <div className="ml-6 pb-8 flex-1">
-        {/* Time and event title on same line */}
-        <div className="flex items-center gap-4 mb-1">
-          <div className="text-sm text-gray-500 font-mono">{formatTime(event.time)}</div>
-          <div className="text-lg font-semibold">{event.short}</div>
+      <div className="ml-6 pb-8 flex-1 mt-[-8px]">
+        {/* First line: Tag, date, and Remove button */}
+        <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center gap-2">
+            <EventTypeTag type={event.type} />
+            <div className="text-xs text-gray-500">{formatEventDateTime(event.time)}</div>
+          </div>
+          <Button variant="outline" size="sm" onClick={() => removeFromTimeline(event.id)}>
+            Remove
+          </Button>
         </div>
-        
+
+        {/* Event title */}
+        <div className="font-semibold mb-2">{event.short}</div>
+
         {/* Description */}
         <div className="text-gray-700 mb-3">{event.description}</div>
-        
+
         {/* Additional fields */}
         <div className="space-y-1 text-sm text-gray-600">
-          <div className="text-xs text-gray-500 uppercase tracking-wide">{event.type}</div>
           {event.user && <div>User: {event.user}</div>}
           {event.metric && <div>Metric: {event.metric}</div>}
         </div>
@@ -105,13 +102,6 @@ export function TimelineEventCard({ event, isLast = false }: TimelineEventCardPr
               <div className="text-sm">{event.notes || "No notes added"}</div>
             </div>
           )}
-        </div>
-
-        {/* Remove button */}
-        <div className="mt-3">
-          <Button variant="outline" size="sm" onClick={() => removeFromTimeline(event.id)}>
-            Remove from Timeline
-          </Button>
         </div>
       </div>
     </div>

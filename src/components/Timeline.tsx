@@ -24,7 +24,7 @@ export function Timeline() {
 
   return (
     <div className="h-full p-4">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-10">
         <h1 className="text-lg font-bold">
           Timeline ({timelineEvents.length} event{timelineEvents.length !== 1 ? "s" : ""})
         </h1>
@@ -39,19 +39,17 @@ export function Timeline() {
           </div>
         )}
       </div>
-      {timelineEvents.length === 0 ? (
-        <p className="text-gray-500">No events in timeline yet. Add events from the left panel.</p>
-      ) : (
-        <div>
-          {timelineEvents.map((event, index) => (
-            <TimelineEventCard 
-              key={event.id} 
-              event={event} 
-              isLast={index === timelineEvents.length - 1}
-            />
-          ))}
-        </div>
-      )}
+      <div className="max-w-3xl mx-auto">
+        {timelineEvents.length === 0 ? (
+          <p className="text-gray-500">No events in timeline yet. Add events from the left panel.</p>
+        ) : (
+          <div>
+            {timelineEvents.map((event, index) => (
+              <TimelineEventCard key={event.id} event={event} isLast={index === timelineEvents.length - 1} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
