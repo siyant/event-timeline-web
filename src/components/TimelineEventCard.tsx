@@ -35,7 +35,6 @@ export function TimelineEventCard({ event, isLast = false }: TimelineEventCardPr
     setTempNotes("");
   };
 
-
   return (
     <div className="relative flex">
       {/* Timeline line and circle */}
@@ -54,25 +53,25 @@ export function TimelineEventCard({ event, isLast = false }: TimelineEventCardPr
             <EventTypeTag type={event.type} />
             <div className="text-xs text-gray-500">{formatEventDateTime(event.time)}</div>
           </div>
-          <Button variant="outline" size="sm" onClick={() => removeFromTimeline(event.id)}>
+          <Button variant="ghost" size="sm" onClick={() => removeFromTimeline(event.id)}>
             Remove
           </Button>
         </div>
 
         {/* Event title */}
-        <div className="font-semibold mb-2">{event.short}</div>
+        <div className="font-semibold">{event.short}</div>
 
         {/* Description */}
-        <div className="text-gray-700 mb-3">{event.description}</div>
+        <div className="text-gray-700 mb-1">{event.description}</div>
 
         {/* Additional fields */}
-        <div className="space-y-1 text-sm text-gray-600">
+        <div className="text-sm text-gray-600">
           {event.user && <div>User: {event.user}</div>}
           {event.metric && <div>Metric: {event.metric}</div>}
         </div>
 
         {/* Notes section */}
-        <div className="mt-3">
+        <div>
           {isEditing ? (
             <div className="space-y-2">
               <label className="text-sm text-gray-600">Notes:</label>
@@ -94,12 +93,13 @@ export function TimelineEventCard({ event, isLast = false }: TimelineEventCardPr
           ) : (
             <div>
               <div className="flex items-start justify-between mb-1">
-                <span className="text-sm text-gray-600">Notes:</span>
+                <div>
+                  <span className="text-sm text-gray-600">Notes: {event.notes || "-"}</span>
+                </div>
                 <Button size="sm" variant="ghost" onClick={handleEditNotes}>
                   Edit
                 </Button>
               </div>
-              <div className="text-sm">{event.notes || "No notes added"}</div>
             </div>
           )}
         </div>
