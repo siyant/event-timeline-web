@@ -1,8 +1,9 @@
-import { useState } from "react";
 import { X } from "lucide-react";
+import { useState } from "react";
 
+import { EventTypeTag } from "@/components/EventTypeTag";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useEventTimelineStore } from "@/lib/store";
@@ -91,28 +92,42 @@ export function RawEvents() {
       </div>
       <div className="space-y-2 overflow-y-auto flex-1">
         {filteredEvents.map((event) => (
-          <Card key={event.id}>
-            <CardHeader>
+          <Card key={event.id} className="gap-2 py-4">
+            <CardHeader className="pb-0">
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-2">
+                  <EventTypeTag type={event.type} />
+                  <div className="text-xs text-gray-500">
+                    {event.time.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "2-digit",
+                    })}
+                    ,{" "}
+                    {event.time.toLocaleTimeString("en-US", {
+                      hour12: false,
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
+                  </div>
+                </div>
+                {isEventInTimeline(event.id) ? (
+                  <Button variant="outline" size="sm" onClick={() => removeFromTimeline(event.id)}>
+                    Remove
+                  </Button>
+                ) : (
+                  <Button size="sm" onClick={() => addToTimeline(event)}>
+                    Add
+                  </Button>
+                )}
+              </div>
               <CardTitle className="text-sm">{event.short}</CardTitle>
-              <CardDescription>{event.type}</CardDescription>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm">{event.description}</p>
-              <div className="text-xs text-gray-500 mt-2">{event.time.toLocaleString()}</div>
-              {event.user && <div className="text-sm text-gray-600 mt-1">User: {event.user}</div>}
-              {event.metric && <div className="text-sm text-gray-600 mt-1">Metric: {event.metric}</div>}
+            <CardContent className="pt-0">
+              <p className="text-sm mb-2">{event.description}</p>
+              {event.user && <div className="text-sm text-gray-600">User: {event.user}</div>}
+              {event.metric && <div className="text-sm text-gray-600">Metric: {event.metric}</div>}
             </CardContent>
-            <CardFooter>
-              {isEventInTimeline(event.id) ? (
-                <Button variant="outline" size="sm" onClick={() => removeFromTimeline(event.id)}>
-                  Remove from Timeline
-                </Button>
-              ) : (
-                <Button size="sm" onClick={() => addToTimeline(event)}>
-                  Add to Timeline
-                </Button>
-              )}
-            </CardFooter>
           </Card>
         ))}
         {filteredEvents.length === 0 && searchQuery.trim() && (

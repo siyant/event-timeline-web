@@ -42,9 +42,13 @@ export function Timeline() {
       {timelineEvents.length === 0 ? (
         <p className="text-gray-500">No events in timeline yet. Add events from the left panel.</p>
       ) : (
-        <div className="space-y-3">
-          {timelineEvents.map((event) => (
-            <TimelineEventCard key={event.id} event={event} />
+        <div>
+          {timelineEvents.map((event, index) => (
+            <TimelineEventCard 
+              key={event.id} 
+              event={event} 
+              isLast={index === timelineEvents.length - 1}
+            />
           ))}
         </div>
       )}
