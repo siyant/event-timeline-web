@@ -1,7 +1,41 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { generateTimelineMarkdown } from "./string-formatting";
+import { formatEventDateTime, generateTimelineMarkdown } from "./string-formatting";
 import type { TimelineEvent } from "./types";
+
+describe("formatEventDateTime", () => {
+  beforeEach(() => {
+    vi.stubEnv("TZ", "UTC");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("should format date and time correctly", () => {
+    const date = new Date("2024-01-15T14:23:45Z");
+    const result = formatEventDateTime(date);
+    expect(result).toBe("Jan 15, 14:23:45");
+  });
+
+  it("should format date with single digit day correctly", () => {
+    const date = new Date("2024-03-05T09:30:15Z");
+    const result = formatEventDateTime(date);
+    expect(result).toBe("Mar 05, 09:30:15");
+  });
+
+  it("should format midnight correctly", () => {
+    const date = new Date("2024-12-31T00:00:00Z");
+    const result = formatEventDateTime(date);
+    expect(result).toBe("Dec 31, 00:00:00");
+  });
+
+  it("should format end of day correctly", () => {
+    const date = new Date("2024-06-20T23:59:59Z");
+    const result = formatEventDateTime(date);
+    expect(result).toBe("Jun 20, 23:59:59");
+  });
+});
 
 describe("generateTimelineMarkdown", () => {
   beforeEach(() => {

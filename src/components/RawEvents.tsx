@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { formatEventDateTime } from "@/lib/string-formatting";
 import { useEventTimelineStore } from "@/lib/store";
 import type { EventType } from "@/lib/types";
 
@@ -98,17 +99,7 @@ export function RawEvents() {
                 <div className="flex items-center gap-2">
                   <EventTypeTag type={event.type} />
                   <div className="text-xs text-gray-500">
-                    {event.time.toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "2-digit",
-                    })}
-                    ,{" "}
-                    {event.time.toLocaleTimeString("en-US", {
-                      hour12: false,
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      second: "2-digit",
-                    })}
+                    {formatEventDateTime(event.time)}
                   </div>
                 </div>
                 {isEventInTimeline(event.id) ? (
