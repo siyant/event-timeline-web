@@ -2,6 +2,23 @@
 
 A lightweight UI that lets engineers view and search a log of raw events, drag relevant ones to the timeline, and annotate timeline events with notes.
 
+## Getting started
+
+```bash
+# Clone the repository
+git clone https://github.com/siyant/event-timeline-web
+cd event-timeline-web
+
+# Install dependencies
+npm install
+
+# Build and run the app
+npm start  # app will run at http://localhost:4173
+
+# Or, start the development server
+npm run dev  # app will run at http://localhost:5173
+```
+
 ## Tech stack
 
 - React with TypeScript
@@ -11,6 +28,7 @@ A lightweight UI that lets engineers view and search a log of raw events, drag r
 - Vitest for running unit tests
 - Zustand for state management
 - dnd-kit for drag-and-drop functionality
+- biome for automatic code formatting
 
 ## Core features
 
@@ -49,5 +67,5 @@ I managed to get the initial MVP functionality (display events, add to/remove fr
   - 1-10min -> 20px padding
   - 10min-1h -> (20px + gap/2) so 10min would be 25px and 1h would be 50px
   - etc for larger time gaps
-- Keyboard navigation
+- Keyboard navigation and shortcuts (eg. saving notes with cmd+enter)
 - Validating the input data (events data) and handling errors (eg. invalid date, missing fields)
